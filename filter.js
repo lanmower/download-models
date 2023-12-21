@@ -15,7 +15,7 @@ async function askChatGPT(question, description) {
 
         const completion = await await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: description + "\n" + question }],
+            messages: [{ role: "user", content: description + "\n\n" + question }],
         });
         console.log(completion.choices[0].message)
         return completion.choices[0].message.content;
@@ -26,8 +26,11 @@ async function askChatGPT(question, description) {
 }
 
 async function processTSVLine(line) {
-    const [description, url] = line.split('\t');
-    const question = '- Ignore the number prefix, does this title describe a single ' + prompt + ' without any other objects like characters holding them or sitting in them or wearing them, respond only with the word yes, or no, please include nothing else in your response';
+    let [description, url] = line.split('\t');
+    description = description.split(' ')
+    description.shift()
+    description = description.join(' ')
+    const question = 'does this describe a scene of a object, respond only with the word yes, or no';
     const sanitizedDescription = description.replace(/[.,]/g, '').toLowerCase();
     const questionForChatGPT = `${question} ${sanitizedDescription}`;
     //console.log("ASKING", { questionForChatGPT, sanitizedDescription })
