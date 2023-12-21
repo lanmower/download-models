@@ -21,14 +21,15 @@ client.on('ready', async () => {
         messages.messages.forEach(message => {
             const regex = /\[(.*?)\]\((.*?)\)/;
             const match = message.content.match(regex);
-            console.log(message.content)
+            //console.log(message.content)
             if (match && match.length === 3 && !urls.includes(match[2])) {
-                models.push([(index++) + " " + message.content.split('\n')[0].split('"')[1], match[2].replaceAll('<', '').replaceAll('>', '')])
+                if (message.content.split('\n')[0].split('"')[2].length) {
+                    models.push([(index++) + " " + message.content.split('\n')[0].split('"')[2], match[2].replaceAll('<', '').replaceAll('>', '')])
+                } else {
+                    models.push([(index++) + " " + message.content.split('\n')[0].split('"')[1], match[2].replaceAll('<', '').replaceAll('>', '')])
+                }
                 urls.push(match[2])
-            } else {
-                console.log("URL not found");
             }
-            //console.log(message.content.split('\n')[0].split('"')[1])
             message.components.forEach(messageActionRow => {
                 messageActionRow.components.forEach(comp => {
                     //console.log(comp.toJSON())
