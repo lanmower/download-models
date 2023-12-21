@@ -44,6 +44,7 @@ client.on('ready', async () => {
         offset += 25;
     }
     fs.writeFileSync('searched.tsv', models.map(a => { return a[0] + '\t' + a[1] }).join('\r\n'))
+    
     process.exit();
 })
 client.login(process.env.DISCORD);
