@@ -1,6 +1,6 @@
 const fs = require('fs');
 require('dotenv').config()
-const prompt = "chair"
+const prompt = process.argv[2]
 // Replace 'YOUR_OPENAI_API_KEY' with your actual OpenAI GPT-3 API key
 const apiKey = process.env.OPENAI;
 
@@ -30,10 +30,10 @@ async function processTSVLine(line) {
     description = description.split(' ')
     description.shift()
     description = description.join(' ')
-    const question = 'does this describe a scene of a object, respond only with the word yes, or no';
+    console.log({ prompt })
+    const question = `does this describe a scene of something that resembles a ${prompt}, respond only with the word yes, or no`;
     const sanitizedDescription = description.replace(/[.,]/g, '').toLowerCase();
     const questionForChatGPT = `${question} ${sanitizedDescription}`;
-    //console.log("ASKING", { questionForChatGPT, sanitizedDescription })
     return await askChatGPT(questionForChatGPT, sanitizedDescription)
         .then((answer) => {
             if (answer.replaceAll('.', '').toLowerCase().startsWith('yes')) return { description, url };
